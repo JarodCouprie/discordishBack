@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from "@nestjs/mongoose";
 import {Model} from "mongoose";
 import {User, UserDocument} from "./users.schema";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class UsersService {
@@ -11,12 +12,20 @@ export class UsersService {
     }
 
     async create(createdUserDto: any): Promise<User> {
+        createdUserDto.password = await bcrypt.hash(createdUserDto.password, 10);
         const createUser = new this.userModel(createdUserDto);
         return createUser.save();
     }
+
 
     async findAll(): Promise<User[]> {
         return this.userModel.find().exec();
     }
 
+    async getByEmailAndClearPassword(email: string, password: string) {
+        const user = await this.userModel.findOne({email});
+        if (user && await bcrypt.compare(password, user.password)) {
+            return user;
+        }
+    }
 }

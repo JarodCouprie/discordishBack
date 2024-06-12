@@ -1,9 +1,10 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post} from '@nestjs/common';
 import {UsersService} from './users.service';
+import {JwtService} from "@nestjs/jwt";
 
 @Controller('user')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {
+    constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService) {
     }
 
     @Get()
@@ -17,9 +18,13 @@ export class UsersController {
     }
 
     @Post("login")
-    async login(@Body() createUserDto: any) {
-        console.log(createUserDto)
-        return '{"jwt": "super jwt"}';
+    async login(@Body() userDto: any) {
+        const user = await this.usersService.getByEmailAndClearPassword(userDto.email, userDto.password)
+        const payload = {
+            sub: user.email
+        }
+        const jwt = await this.jwtService.signAsync(payload);
+        return {jwt};
     }
 
 }
