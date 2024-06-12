@@ -1,5 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {Document} from 'mongoose';
+import {Serveur} from "../server/serveur.schema";
 
 export type UserDocument = User & Document;
 
@@ -13,6 +14,9 @@ export class User {
 
     @Prop()
     avatarUrl: boolean;
+
+    @Prop()
+    servers: Serveur[];
 
 }
 
