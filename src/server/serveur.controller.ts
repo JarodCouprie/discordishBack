@@ -4,18 +4,18 @@ import {AuthGuard} from "../auth.guard";
 
 @Controller('server')
 export class ServeurController {
-    constructor(private readonly serveurService: ServeurService) {
+    constructor(private readonly serverService: ServeurService) {
     }
 
     @UseGuards(AuthGuard)
     @Get()
-    findAll(@Request() request) {
-        console.log(request.user.sub);
-        return this.serveurService.findAllPublic();
+    findAll() {
+        return this.serverService.findAllPublic();
     }
 
+    @UseGuards(AuthGuard)
     @Post()
-    async create(@Body() createServeurDto: any) {
-        return this.serveurService.create(createServeurDto);
+    async create(@Body() createServerDto: any) {
+        return this.serverService.create(createServerDto);
     }
 }

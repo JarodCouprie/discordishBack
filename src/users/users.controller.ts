@@ -1,6 +1,7 @@
-import {Body, Controller, Get, Inject, Post} from '@nestjs/common';
+import {Body, Controller, Get, Post, UseGuards, Request} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {JwtService} from "@nestjs/jwt";
+import {AuthGuard} from "../auth.guard";
 
 @Controller('user')
 export class UsersController {
@@ -25,6 +26,20 @@ export class UsersController {
         }
         const jwt = await this.jwtService.signAsync(payload);
         return {jwt};
+    }
+
+    @Post('join-server')
+    @UseGuards(AuthGuard)
+    async rejoindreServeur(
+        @Body() joinServerDto: any,
+        @Request() requete,
+    ) {
+        const email = requete.user.sub;
+
+        return this.usersService.joinServer(
+            email,
+            joinServerDto._id,
+        );
     }
 
 }

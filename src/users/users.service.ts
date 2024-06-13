@@ -28,4 +28,17 @@ export class UsersService {
             return user;
         }
     }
+
+    async joinServer(
+        email: string,
+        idServer: number,
+    ): Promise<User> {
+        const user = await this.userModel.findOneAndUpdate(
+            {email: email},
+            {$addToSet: {servers: idServer}},
+            {new: true},
+        );
+
+        return user;
+    }
 }
