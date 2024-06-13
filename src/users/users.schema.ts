@@ -24,6 +24,9 @@ export class User {
     @Prop()
     servers: Serveur[];
 
+    @Prop()
+    serversBlackList: Serveur[];
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

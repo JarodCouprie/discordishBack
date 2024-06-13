@@ -1,5 +1,6 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import {Document, Types} from 'mongoose';
+import {User} from "../users/users.schema";
 
 export type ServeurDocument = Serveur & Document;
 
@@ -16,6 +17,10 @@ export class Serveur {
 
     @Prop()
     urlLogo: string;
+
+    @Prop({type: Types.ObjectId, ref: 'User'})
+    createdBy: User;
+
 }
 
 export const ServeurSchema = SchemaFactory.createForClass(Serveur);

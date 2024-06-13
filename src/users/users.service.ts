@@ -22,6 +22,12 @@ export class UsersService {
         return this.userModel.find().exec();
     }
 
+    async findAllFromServer(serverId: string): Promise<User[]> {
+        return this.userModel.find({
+            servers: {$in: serverId}
+        });
+    }
+
     async getByEmailAndClearPassword(email: string, password: string) {
         const user = await this.userModel.findOne({email});
         if (user && await bcrypt.compare(password, user.password)) {

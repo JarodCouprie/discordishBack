@@ -13,9 +13,18 @@ export class ServeurController {
         return this.serverService.findAllPublic();
     }
 
+    @Get('/own')
+    @UseGuards(AuthGuard)
+    findAllServerOfUser(@Request() request: any) {
+        return this.serverService.findAllServerOfUser(request.user.sub);
+    }
+
     @UseGuards(AuthGuard)
     @Post()
-    async create(@Body() createServerDto: any) {
-        return this.serverService.create(createServerDto);
+    async create(@Body() createServerDto: any, @Request() request: any) {
+        const email = request.user.sub;
+        return this.serverService.create(createServerDto, email);
     }
+
+
 }
