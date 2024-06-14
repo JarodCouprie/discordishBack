@@ -9,16 +9,16 @@ export class MessageController {
 
     @UseGuards(AuthGuard)
     @Get("/getByChannelId/:id")
-    async getByChannelId(@Param("id") id: string) {
-        return await this.messageService.getByChannelId(id);
+    async getByChannelId(@Param("id") id: string, @Request() request: any) {
+        const email = request.user.sub;
+        return await this.messageService.getByChannelId(id, email);
     }
 
     @UseGuards(AuthGuard)
     @Post()
-    async create(@Request() request, @Body() createMessageDto: any) {
+    async create(@Request() request: any, @Body() createMessageDto: any) {
         const email = request.user.sub;
         return this.messageService.create(createMessageDto, email);
     }
-
 
 }
