@@ -9,14 +9,16 @@ export class ServeurController {
 
     @UseGuards(AuthGuard)
     @Get()
-    findAll() {
-        return this.serverService.findAllPublic();
+    findAll(@Request() request: any) {
+        const email = request.user.sub;
+        return this.serverService.findAllPublic(email);
     }
 
     @Get('/own')
     @UseGuards(AuthGuard)
     findAllServerOfUser(@Request() request: any) {
-        return this.serverService.findAllServerOfUser(request.user.sub);
+        const email = request.user.sub;
+        return this.serverService.findAllServerOfUser(email);
     }
 
     @UseGuards(AuthGuard)

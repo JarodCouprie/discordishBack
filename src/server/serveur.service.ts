@@ -30,6 +30,7 @@ export class ServeurService {
 
         return this.serveurModel.find({
             _id: {$in: user.servers},
+            usersBlocked: {$ne: user._id.toString()}
         });
     }
 
@@ -39,7 +40,8 @@ export class ServeurService {
             _id: serverId
         });
 
-        if (user._id.toString() !== server.createdBy.toString()) {
+
+        if (user._id.toString() !== server.createdBy.toString() || user._id.toString() === userId) {
             throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
         }
 
@@ -67,7 +69,11 @@ export class ServeurService {
         )
     }
 
-    async findAllPublic(): Promise<Serveur[]> {
-        return this.serveurModel.find({public: true}).exec();
+    async findAllPublic(email: string): Promise<Serveur[]> {
+        const user = await this.userModel.findOne({email});
+        return this.serveurModel.find({
+            public: true,
+            usersBlocked: {$ne: user._id.toString()}
+        }).exec();
     }
 }
