@@ -21,6 +21,9 @@ export class Serveur {
     @Prop({type: Types.ObjectId, ref: 'User'})
     createdBy: User;
 
+    @Prop()
+    usersBlocked: string[];
+
 }
 
 export const ServeurSchema = SchemaFactory.createForClass(Serveur);

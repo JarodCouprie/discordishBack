@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, Request, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Put, Request, UseGuards} from '@nestjs/common';
 import {ServeurService} from './serveur.service';
 import {AuthGuard} from "../auth.guard";
 
@@ -26,5 +26,18 @@ export class ServeurController {
         return this.serverService.create(createServerDto, email);
     }
 
+    @UseGuards(AuthGuard)
+    @Put("/block/:id")
+    async blockUser(@Param("id") serverId: string, @Body() blockUser: any, @Request() request: any) {
+        const email = request.user.sub;
+        return this.serverService.blockUser(email, serverId, blockUser.userId);
+    }
+
+    @UseGuards(AuthGuard)
+    @Put("/unblock/:id")
+    async unblockUser(@Param("id") serverId: string, @Body() unblockUser: any, @Request() request: any) {
+        const email = request.user.sub;
+        return this.serverService.unblockUser(email, serverId, unblockUser.userId);
+    }
 
 }
