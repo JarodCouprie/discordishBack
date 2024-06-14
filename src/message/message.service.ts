@@ -48,6 +48,7 @@ export class MessageService {
         }
 
         createMessageDto.user = user._id;
+        createMessageDto.createdAt = Date.now();
         const createdChannel = new this.messageModel(createMessageDto);
         return createdChannel.save();
     }

@@ -1,4 +1,4 @@
-import {Document, Types} from "mongoose";
+import {Document, now, Types} from "mongoose";
 import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import {User} from "../users/users.schema";
 
@@ -15,7 +15,7 @@ export class Message {
     @Prop({type: Types.ObjectId, ref: 'User'})
     user: User;
 
-    @Prop({default: Date.now()})
+    @Prop({default: now()})
     createdAt: Date;
 }
 
